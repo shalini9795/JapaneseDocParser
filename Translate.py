@@ -21,15 +21,13 @@ class Translate:
         print("filepath is", self.filepathtocsv)
         self.filepathxlsx = "C:\\Applications\\Data\\ExecCompDownloader\\TempDownload\\output_xlsx\\"
         config.read('myconfigdb.ini')
-        self.server = 'DMDEVDB81\DMINPUTDBDEV'
-        self.db = 'PersonnelData'
         connection_str = 'Driver={SQL Server};Server=%s;Database=%s;Trusted_Connection=yes;' % (self.server, self.db)
         print("connection string is", connection_str)
         self.connection = conn.connect(connection_str, autocommit=True)
         self.connection.set_attr(conn.SQL_ATTR_TXN_ISOLATION, conn.SQL_TXN_SERIALIZABLE)
         self.connection.autocommit = False
-        self.jpn = sql.read_sql_query('select * from [dbo].[JapaneseNameMppingDetail]', self.connection)
-        self.jpn_title = sql.read_sql_query('select * from [dbo].[JapaneseNameMppingDetail] where NameType=5',
+        self.jpn = sql.read_sql_query('select * from [dbo].[JapaneseNameMappingDetail]', self.connection)
+        self.jpn_title = sql.read_sql_query('select * from [dbo].[JapaneseNameMappingDetail] where NameType=5',
                                             self.connection)
         # logging.config.fileConfig('aaa.conf')
         # #self.logger = logging.getLogger('MainLogger')
@@ -169,48 +167,6 @@ class Translate:
         filepath = self.filepathxlsx + f
         print("excel filepath is ", filepath)
         data.to_excel(filepath, encoding='utf-8')
-
-        # count = 0
-        # try:
-        #     print(data.columns)
-        #     values = (filingLogId, company)
-        #     print(len(data))
-        #     self.cursor.execute('exec PersonnelData.[dbo].[Update_OfficerStatus] ?,?', values)
-        #     sql = 'exec PersonnelData.[dbo].[Insert_XBRLOfficer] ?,?,?,?,?,?,?,?'
-        #     for i in range(len(data)):
-        #         if self.hasNumbers(str(data.iloc[i, 2])) == True:
-        #             values = (
-        #                 filingLogId, company, data.loc[i, 'EnglishName'], data.iloc[i, 1], data.loc[i, 'EnglishTitle'],
-        #                 'Yes', data.iloc[i, 0], 0)
-        #         else:
-        #             values = (
-        #             filingLogId, company, data.loc[i, 'EnglishName'], data.iloc[i, 2], data.loc[i, 'EnglishTitle'],
-        #             'Yes', data.iloc[i, 0], 0)
-        #
-        #         print(sql, values)
-        #         # self.cursor.execute('exec PersonnelData.[dbo].[Insert_XBRLOfficer] ?,?,?,?,?,?,?,?', values)
-        #     my_word = ["not found"]
-        #     if data.query("EnglishName=='not found'").empty & data.query("EnglishTitle=='not found'").empty:
-        #         status = 3
-        #     else:
-        #         status = 2
-        #     values = (filingLogId, status)
-        #     # self.cursor.execute('exec PersonnelData.[dbo].[Update_FilingStatus] ?,?', values)
-        #     # self.cursor.commit()
-        #     data.drop(data.index, inplace=True)
-        # except Exception as e:
-        #     self.connection.close()
-        #     print("Exception",e)
-        #     # self.logger.debug("error saving in excel")
-        #     # self.logger.error(e)
-            # try:
-            #     # self.parsingFailed(filingLogId)
-            # except:
-            #     print("Exception here")
-            # self.logger.debug("error in calling procedure for filingLogId")
-            # self.logger.debug(filingLogId)
-
-
 
 if __name__ == '__main__':
     t = Translate()
